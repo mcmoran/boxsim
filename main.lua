@@ -1,5 +1,5 @@
 function love.load()
-
+  --ASH TESTTTTT
     -- set up the playing area
     playingAreaWidth = 660
     playingAreaHeight = 480
