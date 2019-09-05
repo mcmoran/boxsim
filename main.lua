@@ -15,6 +15,7 @@ function love.load()
 
     boxNeedState = 0
     currentBigBox = 0
+    -- i'm testing this with git. 
 end
 
 function love.update(dt) -- dt = delta time
