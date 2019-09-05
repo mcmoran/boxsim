@@ -10,7 +10,7 @@ function love.load()
     color1 = {.5, .5, .5} -- sleep
     color2 = {1, .4, .4} -- eat
     color3 = {.22, .67, 1} -- drink
-    color4 = {1, .73, .48} -- learn
+    color4 = {.57, .43, 85} -- learn
     color5 = {1, .95, .75} -- play
     color6 = {.25, .9, .29} -- move
 
@@ -27,19 +27,23 @@ function love.load()
         currentCol = 1 -- 1, 2 or 3
     needLocation = 1
 
+    -- play conditions
+    score = 0
+    timer = 10
+
 end
 
 function love.update(dt) -- dt = delta time
 
     -- setting a conditional loop for keystroke actions
     if love.keyboard.isDown('up') then
-        boxY = boxY - 250 * dt -- use dt so it doesn't go too fast/slow
+        boxY = boxY - 450 * dt -- use dt so it doesn't go too fast/slow
     elseif love.keyboard.isDown('down') then
-        boxY = boxY + 250 * dt
+        boxY = boxY + 450 * dt
     elseif love.keyboard.isDown('left') then
-        boxX = boxX - 250 * dt
+        boxX = boxX - 450 * dt
     elseif love.keyboard.isDown('right') then
-        boxX = boxX + 250 * dt
+        boxX = boxX + 450 * dt
     end
 
     -- make it so the box doesn't go outside the playing area
@@ -64,21 +68,6 @@ function love.update(dt) -- dt = delta time
         elseif boxX < 170 then currentCol = 1
     end
 
-    -- if the box is in the right area, then change the color
-
-    if needLocation == currentLocation then
-        needLocation = love.math.random(1,6)
-    end
-
-    if needLocation == 1 then currentColor = color1
-    elseif needLocation == 2 then currentColor = color2
-    elseif needLocation == 3 then currentColor = color3
-    elseif needLocation == 4 then currentColor = color4
-    elseif needLocation == 5 then currentColor = color5
-    elseif needLocation == 6 then currentColor = color6
-    end
-    
-
     -- set the current location and color of the box
     if (currentRow == 1 and currentCol == 1) then
         currentLocation = 1
@@ -100,6 +89,22 @@ function love.update(dt) -- dt = delta time
         currentColor = color6
     end
 
+    -- if the box is in the right area, then change the color to random
+    if needLocation == currentLocation then
+        needLocation = love.math.random(1,6)
+        if needLocation ~= currentLocation then
+            score = score + 1
+        end
+    end
+
+    if needLocation == 1 then currentColor = color1
+        elseif needLocation == 2 then currentColor = color2
+        elseif needLocation == 3 then currentColor = color3
+        elseif needLocation == 4 then currentColor = color4
+        elseif needLocation == 5 then currentColor = color5
+        elseif needLocation == 6 then currentColor = color6
+    end
+
 end
 
 function love.draw()
@@ -109,6 +114,10 @@ function love.draw()
 
 
     -- these are the background boxes
+
+    -- top bar for score and info
+    love.graphics.setColor(.2, .2, .2, 1)
+    love.graphics.rectangle('fill', 0, 0, 660, 80)
 
     -- sleep box (gray)
     love.graphics.setColor(.3, .3, .3, .9)
@@ -122,8 +131,8 @@ function love.draw()
     love.graphics.setColor(.11, .56, 1, 1)
     love.graphics.rectangle('fill', 440, 80, 220, 200)
 
-    -- learn box (gray)
-    love.graphics.setColor(1, .54, 0, 1)
+    -- learn box
+    love.graphics.setColor(.4, .2, .6, 1)
     love.graphics.rectangle('fill', 0, 280, 220, 200)
 
     -- play box
@@ -134,12 +143,17 @@ function love.draw()
     love.graphics.setColor(.19, .8, .19, 1)
     love.graphics.rectangle('fill', 440, 280, 220, 200)
 
+    -- this is the score
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print("Score: " ..tostring(score), 20, 20)
+    love.graphics.print("Time Remaining: " ..tostring(timer) .. " seconds", 400, 20)
+
     -- this is the boxsim
 
     love.graphics.setColor(unpack(currentColor))
     love.graphics.rectangle('fill', boxX, boxY, boxHeight, boxWidth)
 
-    -- loop to check the state
-    function love.graphics.print(currentRow)
-end
+
+
 end
