@@ -29,11 +29,17 @@ function love.load()
 
     -- play conditions
     score = 0
+    level = 1
     timer = 10
+    countdown = 10
+    gamestart = true
+    gameover = false
 
 end
 
 function love.update(dt) -- dt = delta time
+
+if gamestart == true then
 
     -- setting a conditional loop for keystroke actions
     if love.keyboard.isDown('up') then
@@ -92,6 +98,7 @@ function love.update(dt) -- dt = delta time
     -- if the box is in the right area, then change the color to random
     if needLocation == currentLocation then
         needLocation = love.math.random(1,6)
+        timer = 10
         if needLocation ~= currentLocation then
             score = score + 1
         end
@@ -105,15 +112,22 @@ function love.update(dt) -- dt = delta time
         elseif needLocation == 6 then currentColor = color6
     end
 
+    timer = timer - dt
+    if timer <= 0 then
+        gameover = true
+    end
+
+end
+
+if gameover == true then
+    gamestart = false
+end
+
 end
 
 function love.draw()
 
-    -- Setting the color first.  Top-down syntax
-    -- love.graphics.setColor(math.random(1, 0.5, 0.5, 1)
-
-
-    -- these are the background boxes
+-- these are the background boxes
 
     -- top bar for score and info
     love.graphics.setColor(.2, .2, .2, 1)
@@ -143,17 +157,22 @@ function love.draw()
     love.graphics.setColor(.19, .8, .19, 1)
     love.graphics.rectangle('fill', 440, 280, 220, 200)
 
-    -- this is the score
+-- this is the score and timer
 
     love.graphics.setColor(1, 1, 1)
     love.graphics.print("Score: " ..tostring(score), 20, 20)
-    love.graphics.print("Time Remaining: " ..tostring(timer) .. " seconds", 400, 20)
+    love.graphics.print("Level: " ..tostring(level), 20, 40)
+    love.graphics.print("Time Remaining: " ..tostring(math.ceil(timer)) .. " seconds", 400, 20)
 
-    -- this is the boxsim
+-- this is the boxsim
 
     love.graphics.setColor(unpack(currentColor))
     love.graphics.rectangle('fill', boxX, boxY, boxHeight, boxWidth)
 
 
+    if gameover == true then
+        love.graphics.setColor(1,1,1)
+        love.graphics.print("GAME OVER!", 100, 50)
+    end
 
 end
