@@ -4,15 +4,23 @@ function love.load()
     playingAreaWidth = 660
     playingAreaHeight = 480
 
+    -- setting color values
+    colorWhite = {1, 1, 1}
+    colorBlack = {0, 0, 0}
+    color1 = {.5, .5, .5} -- sleep
+    color2 = {1, .4, .4} -- eat
+    color3 = {.22, .67, 1} -- drink
+    color4 = {1, .65, 1} -- learn
+    color5 = {1, .9, 1} -- play
+    color6 = {.25, .9, .29} -- move
+
     -- create the box
     boxWidth = 50
     boxHeight = 50
     boxX = 85
     boxY = 85
-    boxColorRed = 1 -- initial red value
-    boxColorGreen = 1 -- initial green value
-    boxColorBlue = 1 -- initial blue value
 
+    currentColor = color1Sleep
     boxNeedState = 1 -- what the initial box needs (1-6)
     currentLocation = 1 -- where the box starts from
         currentRow = 1 -- 1 or 2
@@ -42,29 +50,26 @@ function love.update(dt) -- dt = delta time
         elseif boxX < 170 then currentCol = 1
     end
 
-    -- these two while statements determine currentLocation value (1-6)
-    while currentRow[1] do
-        if currentCol == 1 then
-            currentLocation = 1
-        elseif currentCol == 2 then
-            currentLocation = 2
-        elseif currentCol == 3 then
-            currentLocation = 3
-        end
+    -- set the current location and color of the box
+    if (currentRow == 1 and currentCol == 1) then
+        currentLocation = 1
+        currentColor = color1
+    elseif (currentRow == 1 and currentCol == 2) then
+        currentLocation = 2
+        currentColor = color2
+    elseif (currentRow == 1 and currentCol == 3) then
+        currentLocation = 3
+        currentColor = color3
+    elseif (currentRow == 2 and currentCol == 1) then
+        currentLocation = 4
+        currentColor = color4
+    elseif (currentRow == 2 and currentCol == 2) then
+        currentLocation = 5
+        currentColor = color5
+    elseif (currentRow == 2 and currentCol == 3) then
+        currentLocation = 6
+        currentColor = color6
     end
-    while currentRow[2] do
-        if currentCol == 1 then
-            currentLocation = 4
-        elseif currentCol == 2 then
-            currentLocation = 5
-        elseif currentCol == 3 then
-            currentLocation = 6
-        end
-    end
-
-
-    -- loop to check the state
-    function love.graphics.print(currentRow)
 
 end
 
@@ -75,34 +80,38 @@ function love.draw()
 
 
     -- these are the background boxes
-    
+
     -- sleep box (gray)
     love.graphics.setColor(.3, .3, .3, .9)
-    love.graphics.rectangle('fill', 0, 0, 220, 220)
+    love.graphics.rectangle('fill', 0, 80, 220, 200)
 
     -- eat box
     love.graphics.setColor(1, .2, .2, .9)
-    love.graphics.rectangle('fill', 220, 0, 220, 220)
+    love.graphics.rectangle('fill', 220, 80, 220, 200)
 
     -- drink box
     love.graphics.setColor(.11, .56, 1, 1)
-    love.graphics.rectangle('fill', 440, 0, 220, 220)
+    love.graphics.rectangle('fill', 440, 80, 220, 200)
 
     -- learn box (gray)
     love.graphics.setColor(1, .54, 0, 1)
-    love.graphics.rectangle('fill', 0, 220, 220, 220)
+    love.graphics.rectangle('fill', 0, 280, 220, 200)
 
     -- play box
     love.graphics.setColor(1, .84, 0, 1)
-    love.graphics.rectangle('fill', 220, 220, 220, 220)
+    love.graphics.rectangle('fill', 220, 280, 220, 200)
 
     -- move box
     love.graphics.setColor(.19, .8, .19, 1)
-    love.graphics.rectangle('fill', 440, 220, 220, 220)
+    love.graphics.rectangle('fill', 440, 280, 220, 200)
 
 
     -- this is the boxsim
-    love.graphics.setColor(boxColorRed, boxColorGreen, boxColorRed)
+
+    love.graphics.setColor(unpack(currentColor))
     love.graphics.rectangle('fill', boxX, boxY, boxHeight, boxWidth)
+
+    -- loop to check the state
+    function love.graphics.print(currentRow)
 end
 end
