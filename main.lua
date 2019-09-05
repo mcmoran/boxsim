@@ -74,6 +74,8 @@ function love.draw()
     -- love.graphics.setColor(math.random(1, 0.5, 0.5, 1)
 
 
+    -- these are the background boxes
+    
     -- sleep box (gray)
     love.graphics.setColor(.3, .3, .3, .9)
     love.graphics.rectangle('fill', 0, 0, 220, 220)
@@ -99,6 +101,7 @@ function love.draw()
     love.graphics.rectangle('fill', 440, 220, 220, 220)
 
 
+    -- this is the boxsim
     love.graphics.setColor(boxColorRed, boxColorGreen, boxColorRed)
     love.graphics.rectangle('fill', boxX, boxY, boxHeight, boxWidth)
 end
