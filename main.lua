@@ -7,12 +7,12 @@ function love.load()
     -- setting color values for box
     colorWhite = {1, 1, 1}
     colorBlack = {0, 0, 0}
-    color1 = {.5, .5, .5} -- sleep
-    color2 = {1, .4, .4} -- eat
-    color3 = {.22, .67, 1} -- drink
-    color4 = {.57, .43, 85} -- learn
-    color5 = {1, .95, .75} -- play
-    color6 = {.25, .9, .29} -- move
+    color1 = {.5, .5, .5} -- sleep (grey)
+    color2 = {1, .4, .4} -- eat (red)
+    color3 = {.22, .67, 1} -- drink (blue)
+    color4 = {.70, .43, 85} -- learn (purple)
+    color5 = {1, 1, 0} -- play (yellow)
+    color6 = {.25, .9, .29} -- move (green)
 
     -- create the box
     boxWidth = 50
@@ -30,10 +30,11 @@ function love.load()
     -- play conditions
     score = 0
     level = 1
-    timer = 10
+    timer = 20
     countdown = 10
     gamestart = true
     gameover = false
+    i = 1 -- this is the level loop
 
 end
 
@@ -43,13 +44,13 @@ if gamestart == true then
 
     -- setting a conditional loop for keystroke actions
     if love.keyboard.isDown('up') then
-        boxY = boxY - 450 * dt -- use dt so it doesn't go too fast/slow
+        boxY = boxY - 600 * dt -- use dt so it doesn't go too fast/slow
     elseif love.keyboard.isDown('down') then
-        boxY = boxY + 450 * dt
+        boxY = boxY + 600 * dt
     elseif love.keyboard.isDown('left') then
-        boxX = boxX - 450 * dt
+        boxX = boxX - 600 * dt
     elseif love.keyboard.isDown('right') then
-        boxX = boxX + 450 * dt
+        boxX = boxX + 600 * dt
     end
 
     -- make it so the box doesn't go outside the playing area
@@ -96,13 +97,22 @@ if gamestart == true then
     end
 
     -- if the box is in the right area, then change the color to random
+    -- and reset the timer
     if needLocation == currentLocation then
         needLocation = love.math.random(1,6)
-        timer = 10
         if needLocation ~= currentLocation then
             score = score + 1
+            i = i + 1
         end
     end
+
+    -- increase stats every 10 points
+    if i == 10 then
+        level = level + 1
+        timer = (20 - level)
+        i = 0
+    end
+
 
     if needLocation == 1 then currentColor = color1
         elseif needLocation == 2 then currentColor = color2
@@ -119,10 +129,17 @@ if gamestart == true then
 
 end
 
-if gameover == true then
-    gamestart = false
+    if gameover == true then
+        gamestart = false
+    end
+
 end
 
+-- this allows you to exit the game with the escape key
+function love.keypressed(key)
+  if key == "escape" then
+    love.event.push("quit")
+  end
 end
 
 function love.draw()
@@ -134,27 +151,27 @@ function love.draw()
     love.graphics.rectangle('fill', 0, 0, 660, 80)
 
     -- sleep box (gray)
-    love.graphics.setColor(.3, .3, .3, .9)
+    love.graphics.setColor(unpack(color1))
     love.graphics.rectangle('fill', 0, 80, 220, 200)
 
     -- eat box
-    love.graphics.setColor(1, .2, .2, .9)
+    love.graphics.setColor(unpack(color2))
     love.graphics.rectangle('fill', 220, 80, 220, 200)
 
     -- drink box
-    love.graphics.setColor(.11, .56, 1, 1)
+    love.graphics.setColor(unpack(color3))
     love.graphics.rectangle('fill', 440, 80, 220, 200)
 
     -- learn box
-    love.graphics.setColor(.4, .2, .6, 1)
+    love.graphics.setColor(unpack(color4))
     love.graphics.rectangle('fill', 0, 280, 220, 200)
 
     -- play box
-    love.graphics.setColor(1, .84, 0, 1)
+    love.graphics.setColor(unpack(color5))
     love.graphics.rectangle('fill', 220, 280, 220, 200)
 
     -- move box
-    love.graphics.setColor(.19, .8, .19, 1)
+    love.graphics.setColor(unpack(color6))
     love.graphics.rectangle('fill', 440, 280, 220, 200)
 
 -- this is the score and timer
@@ -162,10 +179,19 @@ function love.draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.print("Score: " ..tostring(score), 20, 20)
     love.graphics.print("Level: " ..tostring(level), 20, 40)
-    love.graphics.print("Time Remaining: " ..tostring(math.ceil(timer)) .. " seconds", 400, 20)
+    if timer > 0 then
+        love.graphics.print("Time Remaining: " ..tostring(math.ceil(timer)) .. " seconds", 400, 20)
+    end
+    if timer <= 0 then
+        love.graphics.print("Time Remaining: NONE!", 400, 20)
+    end
+
+
+-- this is the boxsim outline
+    love.graphics.setColor(0, 0, 0, 0.5)
+    love.graphics.rectangle('fill', (boxX+5), (boxY+5), boxHeight, boxWidth)
 
 -- this is the boxsim
-
     love.graphics.setColor(unpack(currentColor))
     love.graphics.rectangle('fill', boxX, boxY, boxHeight, boxWidth)
 
