@@ -149,6 +149,10 @@ if gamestart == true then
         countdownMusic:play()
     end
 
+    if timer > 10 then
+        countdownMusic:stop()
+    end
+
     if timer <= 0 then
         gameover = true
         bgMusic:stop()
