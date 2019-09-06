@@ -1,4 +1,15 @@
+
+
 function love.load()
+
+    blip = love.audio.newSource('Blip_Select4.wav', 'static')
+    timerBlip = love.audio.newSource('timer.wav', 'static')
+    countdownMusic = love.audio.newSource('countdown.ogg', 'static')
+    bgMusic = love.audio.newSource('music1.ogg', 'stream')
+        bgMusic:setLooping(true)
+        bgMusic:play()
+
+    dtCounter = 0
 
     -- set up the playing area
     playingAreaWidth = 660
@@ -106,9 +117,19 @@ if gamestart == true then
         end
     end
 
+    dtCounter = dtCounter + dt
+
+    if (timer > 10 and dtCounter >= 1) then
+        timerBlip:play()
+        dtCounter = 0
+    end
+
+
+
     -- increase stats every 10 points
     if i == 10 then
         level = level + 1
+        blip:play()
         timer = (20 - level)
         i = 0
     end
@@ -123,8 +144,14 @@ if gamestart == true then
     end
 
     timer = timer - dt
+
+    if timer <= 10 then
+        countdownMusic:play()
+    end
+
     if timer <= 0 then
         gameover = true
+        bgMusic:stop()
     end
 
 end
@@ -182,6 +209,9 @@ function love.draw()
     if timer > 0 then
         love.graphics.print("Time Remaining: " ..tostring(math.ceil(timer)) .. " seconds", 400, 20)
     end
+
+
+
     if timer <= 0 then
         love.graphics.print("Time Remaining: NONE!", 400, 20)
     end
