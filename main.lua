@@ -45,7 +45,7 @@ function love.load()
     countdown = 10
     gamestart = true
     gameover = false
-    i = 1 -- this is the level loop
+    i = 0 -- this is the level loop
 
 end
 
