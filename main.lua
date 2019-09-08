@@ -2,6 +2,7 @@
 
 function love.load()
 
+    -- loading the music and audio files
     blip = love.audio.newSource('Blip_Select4.wav', 'static')
     timerBlip = love.audio.newSource('timer.wav', 'static')
     countdownMusic = love.audio.newSource('countdown.ogg', 'static')
@@ -9,6 +10,7 @@ function love.load()
         bgMusic:setLooping(true)
         bgMusic:play()
 
+    -- a counter variable for the detla time change in second increments
     dtCounter = 0
 
     -- set up the playing area
@@ -117,14 +119,14 @@ if gamestart == true then
         end
     end
 
+    -- this makes the counter count in 1 second increments
     dtCounter = dtCounter + dt
 
+    -- plays the timer blip sound each second.
     if (timer > 10 and dtCounter >= 1) then
         timerBlip:play()
         dtCounter = 0
     end
-
-
 
     -- increase stats every 10 points
     if i == 10 then
@@ -134,7 +136,7 @@ if gamestart == true then
         i = 0
     end
 
-
+    -- changes the current color to the need color
     if needLocation == 1 then currentColor = color1
         elseif needLocation == 2 then currentColor = color2
         elseif needLocation == 3 then currentColor = color3
@@ -143,16 +145,20 @@ if gamestart == true then
         elseif needLocation == 6 then currentColor = color6
     end
 
+    -- timer count down
     timer = timer - dt
 
+    -- plays the countdown audio if there are just 10 seconds left
     if timer <= 10 then
         countdownMusic:play()
     end
 
+    -- stops the countdown if more than 10 seconds
     if timer > 10 then
         countdownMusic:stop()
     end
 
+    -- game over yo.
     if timer <= 0 then
         gameover = true
         bgMusic:stop()
@@ -160,6 +166,7 @@ if gamestart == true then
 
 end
 
+    -- turns off the game if it is over
     if gameover == true then
         gamestart = false
     end
@@ -215,7 +222,7 @@ function love.draw()
     end
 
 
-
+    -- adds a message on the timer text if game is over.
     if timer <= 0 then
         love.graphics.print("Time Remaining: NONE!", 400, 20)
     end
@@ -229,7 +236,7 @@ function love.draw()
     love.graphics.setColor(unpack(currentColor))
     love.graphics.rectangle('fill', boxX, boxY, boxHeight, boxWidth)
 
-
+-- prints the "game over" text at the end of the game.
     if gameover == true then
         love.graphics.setColor(1,1,1)
         love.graphics.print("GAME OVER!", 100, 50)
