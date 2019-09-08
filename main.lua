@@ -105,7 +105,7 @@ if gamestart == true then
     elseif (currentRow == 2 and currentCol == 3) then
         currentLocation = 6
         currentColor = color6
-    end
+    end -- hi
 
     -- if the box is in the right area, then change the color to random
     -- and reset the timer
