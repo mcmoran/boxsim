@@ -20,6 +20,21 @@ function love.load()
     -- setting color values for box
     colorWhite = {1, 1, 1}
     colorBlack = {0, 0, 0}
+
+    colorLevel11 = {1, 1, 1}
+    colorLevel12 = {.8, .8, .8}
+    colorLevel13 = {.6, .6, .6}
+    colorLevel14 = {.4, .4, .4}
+    colorLevel15 = {.2, .2, .2}
+    colorLevel16 = {0, 0, 0}
+
+    colorLevel21 = {1, .9, .2}
+    colorLevel22 = {.9, .7, .1}
+    colorLevel23 = {.8, .6, .1}
+    colorLevel24 = {.7, .5, 0}
+    colorLevel25 = {.6, .4, 0}
+    colorLevel26 = {.5, .3, 0}
+
     color1 = {.5, .5, .5} -- sleep (grey)
     color2 = {1, .4, .4} -- eat (red)
     color3 = {.22, .67, 1} -- drink (blue)
@@ -92,6 +107,7 @@ if gamestart == true then
     if (currentRow == 1 and currentCol == 1) then
         currentLocation = 1
         currentColor = color1
+        -- currentColor = colorLevel..level..1  <-- why doesn't this work?
     elseif (currentRow == 1 and currentCol == 2) then
         currentLocation = 2
         currentColor = color2
