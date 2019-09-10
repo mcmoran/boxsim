@@ -30,28 +30,28 @@ function love.load()
   --the player stored as a table. you can set these to taste.
   -- player = {x = 4, y = 4, size = TILE_SIZE, speed = 0.2, timer = 0}
 
-  colorLevel1 = { {1, 1, 1},
-                  {.8, .8, .8},
-                  {.6, .6, .6},
-                  {.4, .4, .4},
-                  {.2, .2, .2},
-                  {0, 0, 0} }
-
-  colorLevel2 = { {1, .9, .2},
-                  {.8, .8, .8},
-                  {.6, .6, .6},
-                  {.4, .4, .4},
-                  {.2, .2, .2},
-                  {0, 0, 0} }
-
-  colorLevel2 = { {1, 1, 1},
-                  {.8, .8, .8},
-                  {.6, .6, .6},
-                  {.4, .4, .4},
-                  {.2, .2, .2},
-                  {0, 0, 0} }
-
     levelMap = { colorLevel1, colorLevel2, colorLevel3 }
+
+    colorLevel1 = { {1, 1, 1},
+                    {.8, .8, .8},
+                    {.6, .6, .6},
+                    {.4, .4, .4},
+                    {.2, .2, .2},
+                    {0, 0, 0} }
+
+    colorLevel2 = { {1, .9, .2},
+                    {.8, .8, .8},
+                    {.6, .6, .6},
+                    {.4, .4, .4},
+                    {.2, .2, .2},
+                    {0, 0, 0} }
+
+    colorLevel2 = { {1, 1, 1},
+                    {.8, .8, .8},
+                    {.6, .6, .6},
+                    {.4, .4, .4},
+                    {.2, .2, .2},
+                    {0, 0, 0} }
 
     --[[colorLevel21 = {1, .9, .2}
     colorLevel22 = {.9, .7, .1}
@@ -131,28 +131,23 @@ if gamestart == true then
     -- set the current location and color of the box
     if (currentRow == 1 and currentCol == 1) then
         currentLocation = 1
-        --currentColor = color1
-        currentColor = levelMap[level][1]
+        currentColor = color1
+        --currentColor = colorLevel .. level .. 1  -- why doesn't this work?
     elseif (currentRow == 1 and currentCol == 2) then
         currentLocation = 2
-        --currentColor = color2
-        currentColor = levelMap[level][2]
+        currentColor = color2
     elseif (currentRow == 1 and currentCol == 3) then
         currentLocation = 3
-        --currentColor = color3
-        currentColor = levelMap[level][3]
+        currentColor = color3
     elseif (currentRow == 2 and currentCol == 1) then
         currentLocation = 4
-        --currentColor = color4
-        currentColor = levelMap[level][4]
+        currentColor = color4
     elseif (currentRow == 2 and currentCol == 2) then
         currentLocation = 5
-        --currentColor = color5
-        currentColor = levelMap[level][5]
+        currentColor = color5
     elseif (currentRow == 2 and currentCol == 3) then
         currentLocation = 6
-        --currentColor = color6
-        currentColor = levelMap[level][6]
+        currentColor = color6
     end -- hi
 
     -- if the box is in the right area, then change the color to random
@@ -183,12 +178,12 @@ if gamestart == true then
     end
 
     -- changes the current color to the need color
-    if needLocation == 1 then currentColor = levelMap[level][1]
-    elseif needLocation == 2 then currentColor = levelMap[level][2]
-    elseif needLocation == 3 then currentColor = levelMap[level][3]
-    elseif needLocation == 4 then currentColor = levelMap[level][4]
-    elseif needLocation == 5 then currentColor = levelMap[level][5]
-    elseif needLocation == 6 then currentColor = levelMap[level][6]
+    if needLocation == 1 then currentColor = color1
+        elseif needLocation == 2 then currentColor = color2
+        elseif needLocation == 3 then currentColor = color3
+        elseif needLocation == 4 then currentColor = color4
+        elseif needLocation == 5 then currentColor = color5
+        elseif needLocation == 6 then currentColor = color6
     end
 
     -- timer count down
@@ -247,33 +242,27 @@ function love.draw()
     -- love.graphics.setColor(unpack(color1))
 
     --love.graphics.setColor(colorLevel1[1])
-    love.graphics.setColor(levelMap[level][1])
-    love.graphics.rectangle('fill', 0, 80, 220, 200)
+        love.graphics.setColor(levelMap[1][1])
+        love.graphics.rectangle('fill', 0, 80, 220, 200)
 
     -- eat box
-    --love.graphics.setColor(unpack(color2))
-    love.graphics.setColor(levelMap[level][2])
+    love.graphics.setColor(unpack(color2))
     love.graphics.rectangle('fill', 220, 80, 220, 200)
 
     -- drink box
-    --love.graphics.setColor(unpack(color3))
-    love.graphics.setColor(levelMap[level][3])
+    love.graphics.setColor(unpack(color3))
     love.graphics.rectangle('fill', 440, 80, 220, 200)
 
     -- learn box
-    --love.graphics.setColor(unpack(color4))
-    love.graphics.setColor(levelMap[level][4])
+    love.graphics.setColor(unpack(color4))
     love.graphics.rectangle('fill', 0, 280, 220, 200)
 
     -- play box
-    --love.graphics.setColor(unpack(color5))
-    love.graphics.setColor(levelMap[level][5])
+    love.graphics.setColor(unpack(color5))
     love.graphics.rectangle('fill', 220, 280, 220, 200)
 
     -- move box
-    --love.graphics.setColor(unpack(color6))
-
-    love.graphics.setColor(levelMap[level][6])
+    love.graphics.setColor(unpack(color6))
     love.graphics.rectangle('fill', 440, 280, 220, 200)
 
 -- this is the score and timer
