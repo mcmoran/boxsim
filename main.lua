@@ -17,6 +17,9 @@ function love.load()
     playingAreaWidth = 660
     playingAreaHeight = 480
 
+    finalCountDown = false
+    finalCountDownNumber = 3
+
     -- setting color values for box
     colorWhite = {1, 1, 1}
     colorBlack = {0, 0, 0}
@@ -107,7 +110,7 @@ if gamestart == true then
     if (currentRow == 1 and currentCol == 1) then
         currentLocation = 1
         currentColor = color1
-        -- currentColor = colorLevel..level..1  <-- why doesn't this work?
+        --currentColor = colorLevel .. level .. 1 .. 1  -- why doesn't this work?
     elseif (currentRow == 1 and currentCol == 2) then
         currentLocation = 2
         currentColor = color2
@@ -167,6 +170,15 @@ if gamestart == true then
     -- plays the countdown audio if there are just 10 seconds left
     if timer <= 10 then
         countdownMusic:play()
+    end
+
+    -- do the last 3 countdown printing loop here
+    if timer <= 3 then
+        finalCountDown = true
+    end
+
+    if timer > 3 then
+        finalCountDown = false
     end
 
     -- stops the countdown if more than 10 seconds
@@ -252,6 +264,14 @@ function love.draw()
     love.graphics.setColor(unpack(currentColor))
     love.graphics.rectangle('fill', boxX, boxY, boxHeight, boxWidth)
 
+-- print out the countdown from 3 to "game over" here
+    if finalCountDown == true then
+        if gameover == true then finalCountDownNumber = "GAME OVER!"
+        end
+        love.graphics.setColor(1, 0, 0)
+        love.graphics.print(tostring(math.ceil(finalCountDownNumber)), 300, 200)
+        finalCountDownNumber = finalCountDownNumber - 1
+    end
 -- prints the "game over" text at the end of the game.
     if gameover == true then
         love.graphics.setColor(1,1,1)
