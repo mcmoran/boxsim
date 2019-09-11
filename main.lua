@@ -2,7 +2,7 @@
 
 function love.load()
 
-    -- translator for 255  color base
+    -- translator for 255  color base -- probalby won't use for this project.
     --[[
     local _setColor = love.graphics.setColor
     function love.graphics.setColor(r, g, b, a)
@@ -10,11 +10,18 @@ function love.load()
     end
     ]]--
 
+    -- fonts
+    mainFont = love.graphics.newFont("Muli-SemiBold.ttf", 14)
+    boldFont = love.graphics.newFont("Muli-Black.ttf", 20)
+    timeFont = love.graphics.newFont("Muli-Black.ttf", 50)
+    bigTimer = love.graphics.newFont("Muli-Black.ttf", 200)
+    gameOverFont = love.graphics.newFont("Muli-Black.ttf", 80)
+
     -- loading the music and audio files
     blip = love.audio.newSource('Blip_Select4.wav', 'static')
     timerBlip = love.audio.newSource('timer.wav', 'static')
     countdownMusic = love.audio.newSource('countdown.ogg', 'static')
-    bgMusic = love.audio.newSource('music1.ogg', 'stream')
+    bgMusic = love.audio.newSource('bby.ogg', 'stream')
         bgMusic:setLooping(true)
         bgMusic:play()
 
@@ -34,6 +41,30 @@ function love.load()
 
     tilemap = { {1, 2, 3},
                 {4, 5, 6} }
+
+
+
+    -- create the box
+    boxWidth = 50
+    boxHeight = 50
+    boxX = 85
+    boxY = 85
+
+    currentColor = color1Sleep
+    boxNeedState = 1 -- what the initial box needs (1-6)
+    currentLocation = 1 -- where the box starts from
+        currentRow = 1 -- 1 or 2
+        currentCol = 1 -- 1, 2 or 3
+    needLocation = 1
+
+    -- play conditions
+    score = 0
+    level = 1
+    timer = 30
+    countdown = 10
+    gamestart = true
+    gameover = false
+    i = 0 -- this is the level loop
 
   --the player stored as a table. you can set these to taste.
   -- player = {x = 4, y = 4, size = TILE_SIZE, speed = 0.2, timer = 0}
@@ -61,15 +92,6 @@ function love.load()
                   {.71, .47, .8},
                   {1, .51, .43},
                   {1, .71, .53} }
-
---[[ level 3 = light rainbow
-  colorLevel3 = { {.96, .92, .72},
-                  {.73, .96, .78},
-                  {.69, .77, .87},
-                  {.75, .65, .82},
-                  {.99, .82, .79},
-                  {.98, .85, .73} }
-]]--
 -- level 4 = greyscale
   colorLevel4 = { {1, 1, 1},
                   {.8, .8, .8},
@@ -126,7 +148,20 @@ function love.load()
                   {.74, .32, 0},
                   {.65, .22, 0} }
 
-    levelMap = { colorLevel1, colorLevel2, colorLevel3, colorLevel4, colorLevel5, colorLevel6, colorLevel7, colorLevel8, colorLevel9, colorLevel10 }
+-- level 11 = light rainbow
+  colorLevel11 = { {.96, .92, .72},
+                  {.73, .96, .78},
+                  {.69, .77, .87},
+                  {.75, .65, .82},
+                  {.99, .82, .79},
+                  {.98, .85, .73} }
+
+
+    levelMap = { colorLevel1, colorLevel2, colorLevel3, colorLevel4,
+                colorLevel5, colorLevel6, colorLevel7, colorLevel8,
+                colorLevel9, colorLevel10, colorLevel11 }
+
+--[[ older colors (discontinued)
 
     color1 = {.5, .5, .5} -- sleep (grey)
     color2 = {1, .4, .4} -- eat (red)
@@ -134,28 +169,7 @@ function love.load()
     color4 = {.70, .43, 85} -- learn (purple)
     color5 = {1, 1, 0} -- play (yellow)
     color6 = {.25, .9, .29} -- move (green)
-
-    -- create the box
-    boxWidth = 50
-    boxHeight = 50
-    boxX = 85
-    boxY = 85
-
-    currentColor = color1Sleep
-    boxNeedState = 1 -- what the initial box needs (1-6)
-    currentLocation = 1 -- where the box starts from
-        currentRow = 1 -- 1 or 2
-        currentCol = 1 -- 1, 2 or 3
-    needLocation = 1
-
-    -- play conditions
-    score = 0
-    level = 1
-    timer = 20
-    countdown = 10
-    gamestart = true
-    gameover = false
-    i = 0 -- this is the level loop
+    --]]
 
 end
 
@@ -228,6 +242,7 @@ if gamestart == true then
     if needLocation == currentLocation then
         needLocation = love.math.random(1,6)
         if needLocation ~= currentLocation then
+            timerBlip:play()
             score = score + 1
             i = i + 1
         end
@@ -238,7 +253,6 @@ if gamestart == true then
 
     -- plays the timer blip sound each second.
     if (timer > 10 and dtCounter >= 1) then
-        timerBlip:play()
         dtCounter = 0
     end
 
@@ -346,17 +360,59 @@ function love.draw()
 
 -- this is the score and timer
 
+-- Setting the font so that it is used when drawning the string.
+
+
+
+    -- the score prints
     love.graphics.setColor(1, 1, 1)
-    love.graphics.print("Score: " ..tostring(score), 20, 20)
-    love.graphics.print("Level: " ..tostring(level), 20, 40)
+    love.graphics.setFont(mainFont)
+    love.graphics.print("SCORE: ", 20, 20)
+
+    love.graphics.setColor(0, .5, 1)
+    love.graphics.setFont(boldFont)
+    love.graphics.print(tostring(score), 80, 15)
+
+    -- the level score
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(mainFont)
+    love.graphics.print("LEVEL: ", 20, 50)
+
+    love.graphics.setColor(levelMap[level][1])
+    love.graphics.setFont(boldFont)
+    love.graphics.print(tostring(level), 80, 45)
+
+    -- the timer remaining
     if timer > 0 then
-        love.graphics.print("Time Remaining: " ..tostring(math.ceil(timer)) .. " seconds", 400, 20)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.setFont(mainFont)
+        love.graphics.print("TIME: ", 400, 45)
+
+        love.graphics.setColor(levelMap[level][1])
+        love.graphics.setFont(timeFont)
+        love.graphics.print(tostring(math.ceil(timer)), 450, 10)
     end
+
+    if timer <= 3 then
+        love.graphics.setColor(1, 1, 1, 0.5)
+        love.graphics.setFont(bigTimer)
+        love.graphics.print(tostring(math.ceil(timer)), 270, 150)
+    elseif timer == 0 then
+    end
+    --[[if timer > 0 then
+        love.graphics.print("Time Remaining" ..tostring(math.ceil(timer)) .. " seconds", 350, 20)
+    end--]]
 
 
     -- adds a message on the timer text if game is over.
     if timer <= 0 then
-        love.graphics.print("Time Remaining: NONE!", 400, 20)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.setFont(mainFont)
+        love.graphics.print("TIME: ", 400, 45)
+
+        love.graphics.setColor(levelMap[level][1])
+        love.graphics.setFont(timeFont)
+        love.graphics.print("NONE!", 450, 10)
     end
 
 
@@ -368,7 +424,7 @@ function love.draw()
     love.graphics.setColor(unpack(currentColor))
     love.graphics.rectangle('fill', boxX, boxY, boxHeight, boxWidth)
 
--- print out the countdown from 3 to "game over" here
+--[[ print out the countdown from 3 to "game over" here
     if finalCountDown == true then
         if gameover == true then finalCountDownNumber = "GAME OVER!"
         end
@@ -376,10 +432,15 @@ function love.draw()
         love.graphics.print(tostring(math.ceil(finalCountDownNumber)), 300, 200)
         finalCountDownNumber = finalCountDownNumber - 1
     end
+    --]]
+
 -- prints the "game over" text at the end of the game.
     if gameover == true then
-        love.graphics.setColor(1,1,1)
-        love.graphics.print("GAME OVER!", 100, 50)
+        love.graphics.setFont(gameOverFont)
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.print("GAME OVER!", 85, 235)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print("GAME OVER!", 80, 230)
     end
 
 end
