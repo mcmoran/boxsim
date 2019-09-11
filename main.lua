@@ -2,6 +2,14 @@
 
 function love.load()
 
+    -- translator for 255  color base
+    --[[
+    local _setColor = love.graphics.setColor
+    function love.graphics.setColor(r, g, b, a)
+        return _setColor(r/255, g/255, b/255, a and a/255)
+    end
+    ]]--
+
     -- loading the music and audio files
     blip = love.audio.newSource('Blip_Select4.wav', 'static')
     timerBlip = love.audio.newSource('timer.wav', 'static')
@@ -37,14 +45,14 @@ function love.load()
                   {.2, .2, .2},
                   {0, 0, 0} }
 
-  colorLevel2 = { {1, .9, .2},
-                  {.8, .8, .8},
-                  {.6, .6, .6},
-                  {.4, .4, .4},
-                  {.2, .2, .2},
-                  {0, 0, 0} }
+  colorLevel2 = { {.96, .94, .8},
+                  {.94, .86, .54},
+                  {.86, .76, .32},
+                  {.82, .7, .47},
+                  {.72, .6, .02},
+                  {.50, .4, 0} }
 
-  colorLevel2 = { {1, 1, 1},
+  colorLevel3 = { {1, 1, 1},
                   {.8, .8, .8},
                   {.6, .6, .6},
                   {.4, .4, .4},
