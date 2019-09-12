@@ -42,7 +42,7 @@ function love.load()
     tilemap = { {1, 2, 3},
                 {4, 5, 6} }
 
-
+    currentSpeed = 600
 
     -- create the box
     boxWidth = 50
@@ -179,13 +179,13 @@ if gamestart == true then
 
     -- setting a conditional loop for keystroke actions
     if love.keyboard.isDown('up') then
-        boxY = boxY - 600 * dt -- use dt so it doesn't go too fast/slow
+        boxY = boxY - currentSpeed * dt -- use dt so it doesn't go too fast/slow
     elseif love.keyboard.isDown('down') then
-        boxY = boxY + 600 * dt
+        boxY = boxY + currentSpeed * dt
     elseif love.keyboard.isDown('left') then
-        boxX = boxX - 600 * dt
+        boxX = boxX - currentSpeed * dt
     elseif love.keyboard.isDown('right') then
-        boxX = boxX + 600 * dt
+        boxX = boxX + currentSpeed * dt
     end
 
     -- make it so the box doesn't go outside the playing area
@@ -260,7 +260,11 @@ if gamestart == true then
     if i == 10 then
         level = level + 1
         blip:play()
-        timer = (20 - level)
+        timer = timer * 1.3
+        currentSpeed = currentSpeed - 50
+        if currentSpeed < 100 then
+            currentSpeed = 100
+        end
         i = 0
     end
 
