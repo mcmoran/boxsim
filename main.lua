@@ -19,10 +19,11 @@ function love.load()
 
     -- loading the music and audio files
     blip = love.audio.newSource('Blip_Select4.wav', 'static')
-    timerBlip = love.audio.newSource('timer.wav', 'static')
+    timerBlip = love.audio.newSource('hit.wav', 'static')
     countdownMusic = love.audio.newSource('countdown.ogg', 'static')
     bgMusic = love.audio.newSource('bby.ogg', 'stream')
         bgMusic:setLooping(true)
+        bgMusic:setVolume(0.1)
         bgMusic:play()
 
     -- a counter variable for the detla time change in second increments
@@ -242,6 +243,8 @@ if gamestart == true then
     if needLocation == currentLocation then
         needLocation = love.math.random(1,6)
         if needLocation ~= currentLocation then
+
+            timerBlip:setVolume(0.2)
             timerBlip:play()
             score = score + 1
             i = i + 1
