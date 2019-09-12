@@ -260,7 +260,7 @@ if gamestart == true then
     if i == 10 then
         level = level + 1
         blip:play()
-        timer = timer * 1.3
+        timer = timer * 1.3 + 5
         currentSpeed = currentSpeed - 50
         if currentSpeed < 100 then
             currentSpeed = 100
